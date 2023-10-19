@@ -21,4 +21,4 @@ EG: `forge test --match-test test_onlyOwner -vvvv`
 ## Generate coverage report
 `forge coverage --report lcov`
 
-`genhtml lcov.info  -o report --branch-coverage`
+`genhtml lcov.info -o report --branch-coverage`
