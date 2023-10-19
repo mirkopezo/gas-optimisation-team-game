@@ -17,3 +17,8 @@ Run: `forge test --gas-report`
 ## To run a specific test
 RUN:`forge test --match-test {TESTNAME} -vvvv`
 EG: `forge test --match-test test_onlyOwner -vvvv`
+
+## Generate coverage report
+`forge coverage --report lcov`
+
+`genhtml lcov.info  -o report --branch-coverage`
