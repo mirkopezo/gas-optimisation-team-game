@@ -20,6 +20,7 @@ contract GasContract is Ownable, Constants {
     mapping(address => uint256) public whitelist;
     address[5] public administrators;
     bool public isReady = false;
+
     enum PaymentType {
         Unknown,
         BasicPayment,
@@ -27,6 +28,7 @@ contract GasContract is Ownable, Constants {
         Dividend,
         GroupPayment
     }
+
     PaymentType constant defaultPayment = PaymentType.Unknown;
 
     History[] public paymentHistory; // when a payment was updated
@@ -46,9 +48,10 @@ contract GasContract is Ownable, Constants {
         address updatedBy;
         uint256 blockNumber;
     }
+
     uint256 wasLastOdd = 1;
     mapping(address => uint256) public isOddWhitelistUser;
-    
+
     struct ImportantStruct {
         uint256 amount;
         uint256 valueA; // max 3 digits
@@ -57,6 +60,7 @@ contract GasContract is Ownable, Constants {
         bool paymentStatus;
         address sender;
     }
+
     mapping(address => ImportantStruct) public whiteListStruct;
 
     event AddedToWhitelist(address userAddress, uint256 tier);
@@ -64,10 +68,7 @@ contract GasContract is Ownable, Constants {
     modifier onlyAdminOrOwner() {
         address senderOfTx = msg.sender;
         if (checkForAdmin(senderOfTx)) {
-            require(
-                checkForAdmin(senderOfTx),
-                "Gas Contract Only Admin Check-  Caller not admin"
-            );
+            require(checkForAdmin(senderOfTx), "Gas Contract Only Admin Check-  Caller not admin");
             _;
         } else if (senderOfTx == contractOwner) {
             _;
@@ -98,12 +99,7 @@ contract GasContract is Ownable, Constants {
 
     event supplyChanged(address indexed, uint256 indexed);
     event Transfer(address recipient, uint256 amount);
-    event PaymentUpdated(
-        address admin,
-        uint256 ID,
-        uint256 amount,
-        string recipient
-    );
+    event PaymentUpdated(address admin, uint256 ID, uint256 amount, string recipient);
     event WhiteListTransfer(address indexed);
 
     constructor(address[] memory _admins, uint256 _totalSupply) {
@@ -127,11 +123,7 @@ contract GasContract is Ownable, Constants {
         }
     }
 
-    function getPaymentHistory()
-        public
-        payable
-        returns (History[] memory paymentHistory_)
-    {
+    function getPaymentHistory() public payable returns (History[] memory paymentHistory_) {
         return paymentHistory;
     }
 
@@ -160,11 +152,7 @@ contract GasContract is Ownable, Constants {
         return mode;
     }
 
-
-    function addHistory(address _updateAddress, bool _tradeMode)
-        public
-        returns (bool status_, bool tradeMode_)
-    {
+    function addHistory(address _updateAddress, bool _tradeMode) public returns (bool status_, bool tradeMode_) {
         History memory history;
         history.blockNumber = block.number;
         history.lastUpdate = block.timestamp;
@@ -177,28 +165,14 @@ contract GasContract is Ownable, Constants {
         return ((status[0] == true), _tradeMode);
     }
 
-    function getPayments(address _user)
-        public
-        view
-        returns (Payment[] memory payments_)
-    {
-        require(
-            _user != address(0),
-            "Gas Contract - getPayments function - User must have a valid non zero address"
-        );
+    function getPayments(address _user) public view returns (Payment[] memory payments_) {
+        require(_user != address(0), "Gas Contract - getPayments function - User must have a valid non zero address");
         return payments[_user];
     }
 
-    function transfer(
-        address _recipient,
-        uint256 _amount,
-        string calldata _name
-    ) public returns (bool status_) {
+    function transfer(address _recipient, uint256 _amount, string calldata _name) public returns (bool status_) {
         address senderOfTx = msg.sender;
-        require(
-            balances[senderOfTx] >= _amount,
-            "Gas Contract - Transfer function - Sender has insufficient Balance"
-        );
+        require(balances[senderOfTx] >= _amount, "Gas Contract - Transfer function - Sender has insufficient Balance");
         require(
             bytes(_name).length < 9,
             "Gas Contract - Transfer function -  The recipient name is too long, there is a max length of 8 characters"
@@ -222,20 +196,9 @@ contract GasContract is Ownable, Constants {
         return (status[0] == true);
     }
 
-    function updatePayment(
-        address _user,
-        uint256 _ID,
-        uint256 _amount,
-        PaymentType _type
-    ) public onlyAdminOrOwner {
-        require(
-            _ID > 0,
-            "Gas Contract - Update Payment function - ID must be greater than 0"
-        );
-        require(
-            _amount > 0,
-            "Gas Contract - Update Payment function - Amount must be greater than 0"
-        );
+    function updatePayment(address _user, uint256 _ID, uint256 _amount, PaymentType _type) public onlyAdminOrOwner {
+        require(_ID > 0, "Gas Contract - Update Payment function - ID must be greater than 0");
+        require(_amount > 0, "Gas Contract - Update Payment function - Amount must be greater than 0");
         require(
             _user != address(0),
             "Gas Contract - Update Payment function - Administrator must have a valid non zero address"
@@ -251,24 +214,13 @@ contract GasContract is Ownable, Constants {
                 payments[_user][ii].amount = _amount;
                 bool tradingMode = getTradingMode();
                 addHistory(_user, tradingMode);
-                emit PaymentUpdated(
-                    senderOfTx,
-                    _ID,
-                    _amount,
-                    payments[_user][ii].recipientName
-                );
+                emit PaymentUpdated(senderOfTx, _ID, _amount, payments[_user][ii].recipientName);
             }
         }
     }
 
-    function addToWhitelist(address _userAddrs, uint256 _tier)
-        public
-        onlyAdminOrOwner
-    {
-        require(
-            _tier < 255,
-            "Gas Contract - addToWhitelist function -  tier level should not be greater than 255"
-        );
+    function addToWhitelist(address _userAddrs, uint256 _tier) public onlyAdminOrOwner {
+        require(_tier < 255, "Gas Contract - addToWhitelist function -  tier level should not be greater than 255");
         whitelist[_userAddrs] = _tier;
         if (_tier > 3) {
             whitelist[_userAddrs] -= _tier;
@@ -293,31 +245,23 @@ contract GasContract is Ownable, Constants {
         emit AddedToWhitelist(_userAddrs, _tier);
     }
 
-    function whiteTransfer(
-        address _recipient,
-        uint256 _amount
-    ) public checkIfWhiteListed(msg.sender) {
+    function whiteTransfer(address _recipient, uint256 _amount) public checkIfWhiteListed(msg.sender) {
         address senderOfTx = msg.sender;
         whiteListStruct[senderOfTx] = ImportantStruct(_amount, 0, 0, 0, true, msg.sender);
-        
+
         require(
-            balances[senderOfTx] >= _amount,
-            "Gas Contract - whiteTransfers function - Sender has insufficient Balance"
+            balances[senderOfTx] >= _amount, "Gas Contract - whiteTransfers function - Sender has insufficient Balance"
         );
-        require(
-            _amount > 3,
-            "Gas Contract - whiteTransfers function - amount to send have to be bigger than 3"
-        );
+        require(_amount > 3, "Gas Contract - whiteTransfers function - amount to send have to be bigger than 3");
         balances[senderOfTx] -= _amount;
         balances[_recipient] += _amount;
         balances[senderOfTx] += whitelist[senderOfTx];
         balances[_recipient] -= whitelist[senderOfTx];
-        
+
         emit WhiteListTransfer(_recipient);
     }
 
-
-    function getPaymentStatus(address sender) public returns (bool, uint256) {        
+    function getPaymentStatus(address sender) public returns (bool, uint256) {
         return (whiteListStruct[sender].paymentStatus, whiteListStruct[sender].amount);
     }
 
@@ -325,8 +269,7 @@ contract GasContract is Ownable, Constants {
         payable(msg.sender).transfer(msg.value);
     }
 
-
     fallback() external payable {
-         payable(msg.sender).transfer(msg.value);
+        payable(msg.sender).transfer(msg.value);
     }
 }

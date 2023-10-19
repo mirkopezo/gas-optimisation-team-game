@@ -22,3 +22,6 @@ EG: `forge test --match-test test_onlyOwner -vvvv`
 `forge coverage --report lcov`
 
 `genhtml lcov.info -o report --branch-coverage`
+
+## Format code
+`forge fmt`
