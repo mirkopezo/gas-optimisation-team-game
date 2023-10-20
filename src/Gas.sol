@@ -67,10 +67,7 @@ contract GasContract is Ownable, Constants {
 
     modifier onlyAdminOrOwner() {
         address senderOfTx = msg.sender;
-        if (checkForAdmin(senderOfTx)) {
-            require(checkForAdmin(senderOfTx), "Gas Contract Only Admin Check-  Caller not admin");
-            _;
-        } else if (senderOfTx == contractOwner) {
+        if (senderOfTx == contractOwner) {
             _;
         } else {
             revert(
@@ -123,16 +120,6 @@ contract GasContract is Ownable, Constants {
         }
     }
 
-    function checkForAdmin(address _user) public view returns (bool admin_) {
-        bool admin = false;
-        for (uint256 ii = 0; ii < administrators.length; ii++) {
-            if (administrators[ii] == _user) {
-                admin = true;
-            }
-        }
-        return admin;
-    }
-
     function balanceOf(address _user) public view returns (uint256 balance_) {
         uint256 balance = balances[_user];
         return balance;
@@ -172,16 +159,8 @@ contract GasContract is Ownable, Constants {
             whitelist[_userAddrs] -= _tier;
             whitelist[_userAddrs] = 2;
         }
-        uint256 wasLastAddedOdd = wasLastOdd;
-        if (wasLastAddedOdd == 1) {
-            wasLastOdd = 0;
-            isOddWhitelistUser[_userAddrs] = wasLastAddedOdd;
-        } else if (wasLastAddedOdd == 0) {
-            wasLastOdd = 1;
-            isOddWhitelistUser[_userAddrs] = wasLastAddedOdd;
-        } else {
-            revert("Contract hacked, imposible, call help");
-        }
+        isOddWhitelistUser[_userAddrs] = wasLastOdd;
+        wasLastOdd = 0;
         emit AddedToWhitelist(_userAddrs, _tier);
     }
 
