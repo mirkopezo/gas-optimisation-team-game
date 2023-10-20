@@ -1,3 +1,5 @@
+Current deployment cost: 1166681
+
 # GAS OPTIMSATION 
 
 - Your task is to edit and optimise the Gas.sol contract. 
