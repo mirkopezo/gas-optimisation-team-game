@@ -1,25 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.0;
+pragma solidity 0.8.21;
 
-import "./Ownable.sol";
-
-contract Constants {
-    uint256 public tradeFlag = 1;
-    uint256 public basicFlag = 0;
-    uint256 public dividendFlag = 1;
-}
-
-contract GasContract is Ownable, Constants {
+contract GasContract {
     uint256 public totalSupply = 0; // cannot be updated
     uint256 public paymentCounter = 0;
     mapping(address => uint256) public balances;
     uint256 public tradePercent = 12;
     address public contractOwner;
-    uint256 public tradeMode = 0;
     mapping(address => Payment[]) public payments;
     mapping(address => uint256) public whitelist;
     address[5] public administrators;
-    bool public isReady = false;
 
     enum PaymentType {
         Unknown,
@@ -29,10 +19,6 @@ contract GasContract is Ownable, Constants {
         GroupPayment
     }
 
-    PaymentType constant defaultPayment = PaymentType.Unknown;
-
-    History[] public paymentHistory; // when a payment was updated
-
     struct Payment {
         PaymentType paymentType;
         uint256 paymentID;
@@ -41,12 +27,6 @@ contract GasContract is Ownable, Constants {
         address recipient;
         address admin; // administrators address
         uint256 amount;
-    }
-
-    struct History {
-        uint256 lastUpdate;
-        address updatedBy;
-        uint256 blockNumber;
     }
 
     uint256 wasLastOdd = 1;
@@ -96,10 +76,9 @@ contract GasContract is Ownable, Constants {
 
     event supplyChanged(address indexed, uint256 indexed);
     event Transfer(address recipient, uint256 amount);
-    event PaymentUpdated(address admin, uint256 ID, uint256 amount, string recipient);
     event WhiteListTransfer(address indexed);
 
-    constructor(address[] memory _admins, uint256 _totalSupply) {
+    constructor(address[] memory _admins, uint256 _totalSupply) payable {
         contractOwner = msg.sender;
         totalSupply = _totalSupply;
 
@@ -176,7 +155,7 @@ contract GasContract is Ownable, Constants {
         emit WhiteListTransfer(_recipient);
     }
 
-    function getPaymentStatus(address sender) public returns (bool, uint256) {
+    function getPaymentStatus(address sender) public view returns (bool, uint256) {
         return (whiteListStruct[sender].paymentStatus, whiteListStruct[sender].amount);
     }
 }
