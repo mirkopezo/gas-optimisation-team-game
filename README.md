@@ -1,4 +1,4 @@
-Current deployment cost: 1166681
+Current deployment cost: 807641
 
 # GAS OPTIMSATION 
 
