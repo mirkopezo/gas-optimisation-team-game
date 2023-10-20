@@ -1,3 +1,5 @@
+Before merging make sure that the deployment cost is lower than the current deployment cost. If that is case, change the deployment cost to the new value.
+
 Current deployment cost: 807641
 
 # GAS OPTIMSATION 
