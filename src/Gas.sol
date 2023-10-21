@@ -11,8 +11,8 @@ contract GasContract {
         address sender;
     }
 
+    address private constant contractOwner = address(0x1234);
     mapping(address => uint256) public balances;
-    address public immutable contractOwner;
     mapping(address => uint256) public whitelist;
     mapping(address => ImportantStruct) private whiteListStruct;
 
@@ -20,8 +20,7 @@ contract GasContract {
     event WhiteListTransfer(address indexed);
 
     modifier onlyAdminOrOwner() {
-        address senderOfTx = msg.sender;
-        if (senderOfTx == contractOwner) {
+        if (msg.sender == contractOwner) {
             _;
         } else {
             revert();
@@ -29,30 +28,16 @@ contract GasContract {
     }
 
     constructor(address[] memory, uint256 _totalSupply) payable {
-        contractOwner = msg.sender;
-
         balances[contractOwner] = _totalSupply;
     }
 
     function transfer(address _recipient, uint256 _amount, string calldata) public {
-        address senderOfTx = msg.sender;
-        balances[senderOfTx] -= _amount;
+        balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
     }
 
     function addToWhitelist(address _userAddrs, uint256 _tier) public onlyAdminOrOwner {
         if (_tier >= 255) revert();
-        whitelist[_userAddrs] = _tier;
-        if (_tier > 3) {
-            whitelist[_userAddrs] -= _tier;
-            whitelist[_userAddrs] = 3;
-        } else if (_tier == 1) {
-            whitelist[_userAddrs] -= _tier;
-            whitelist[_userAddrs] = 1;
-        } else if (_tier > 0 && _tier < 3) {
-            whitelist[_userAddrs] -= _tier;
-            whitelist[_userAddrs] = 2;
-        }
         emit AddedToWhitelist(_userAddrs, _tier);
     }
 
@@ -68,9 +53,8 @@ contract GasContract {
         emit WhiteListTransfer(_recipient);
     }
 
-    function balanceOf(address _user) public view returns (uint256 balance_) {
-        uint256 balance = balances[_user];
-        return balance;
+    function balanceOf(address _user) public view returns (uint256) {
+        return balances[_user];
     }
 
     function getPaymentStatus(address sender) public view returns (bool, uint256) {
