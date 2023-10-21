@@ -11,7 +11,7 @@ contract GasContract {
         address sender;
     }
 
-    address public constant contractOwner = address(0x1234);
+    address private constant contractOwner = address(0x1234);
     mapping(address => uint256) public balances;
     mapping(address => uint256) public whitelist;
     mapping(address => ImportantStruct) private whiteListStruct;
