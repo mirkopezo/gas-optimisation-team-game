@@ -2,24 +2,15 @@
 pragma solidity 0.8.21;
 
 contract GasContract {
-    struct ImportantStruct {
-        uint256 amount;
-        uint256 valueA; // max 3 digits
-        uint256 bigValue;
-        uint256 valueB; // max 3 digits
-        bool paymentStatus;
-        address sender;
-    }
-
-    address private constant contractOwner = address(0x1234);
+    address private constant CONTRACT_OWNER = address(0x1234);
     mapping(address => uint256) public balances;
-    mapping(address => ImportantStruct) private whiteListStruct;
+    mapping(address => uint256) private _whiteListStruct;
 
     event AddedToWhitelist(address userAddress, uint256 tier);
     event WhiteListTransfer(address indexed);
 
     modifier onlyAdminOrOwner() {
-        if (msg.sender == contractOwner) {
+        if (msg.sender == CONTRACT_OWNER) {
             _;
         } else {
             revert();
@@ -33,22 +24,21 @@ contract GasContract {
     }
 
     function addToWhitelist(address _userAddrs, uint256 _tier) external onlyAdminOrOwner {
-        if (_tier >= 255) revert();
+        if (_tier > 254) revert();
         emit AddedToWhitelist(_userAddrs, _tier);
     }
 
     function whiteTransfer(address _recipient, uint256 _amount) external {
-        address senderOfTx = msg.sender;
-        whiteListStruct[senderOfTx] = ImportantStruct(_amount, 0, 0, 0, true, senderOfTx);
+        _whiteListStruct[msg.sender] = _amount;
 
-        balances[senderOfTx] -= _amount;
+        balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
 
         emit WhiteListTransfer(_recipient);
     }
 
     function getPaymentStatus(address sender) external view returns (bool, uint256) {
-        return (whiteListStruct[sender].paymentStatus, whiteListStruct[sender].amount);
+        return (true, _whiteListStruct[sender]);
     }
 
     function administrators(uint256 _index) external pure returns (address) {
