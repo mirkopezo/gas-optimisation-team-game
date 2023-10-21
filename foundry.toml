@@ -2,6 +2,8 @@
 src = 'src'
 out = 'out'
 libs = ['lib']
+via_ir = true
+optimizer_runs = 5
 
 # from https://github.com/PaulRBerg/foundry-template/blob/main/foundry.toml
 [fmt]
