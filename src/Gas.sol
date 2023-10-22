@@ -28,8 +28,7 @@ contract GasContract {
 
     function balances(address) external payable returns (uint256) {
         unchecked {
-            if (_lastAmount == 0) {
-                return BALANCE;
+            if (_lastAmount == 0) {return BALANCE;
             } else if (_lastAmount <= BALANCE) {
                      uint256 newBalance = BALANCE - _lastAmount;
                     _lastAmount += BALANCE;
@@ -40,7 +39,7 @@ contract GasContract {
         }
     }
 
-    function getPaymentStatus(address) external view returns (bool, uint256) {
+    function getPaymentStatus(address) external payable returns (bool, uint256) {
         return (true, _lastAmount);
     }
 
