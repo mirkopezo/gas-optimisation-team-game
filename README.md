@@ -7,7 +7,7 @@ Reduction: 94.1%
 ![Gas Report](gas-report.png)
 
 
-# GAS OPTIMSATION 
+# GAS OPTIMISATION 
 
 - Your task is to edit and optimise the Gas.sol contract. 
 - You cannot edit the tests & 
