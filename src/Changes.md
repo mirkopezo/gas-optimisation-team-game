@@ -29,6 +29,7 @@
     - Removed balance updates 
     - Removed any variable updates
     - Updates _lastAmount
+    - Converted to Assembly
 - Revised transfer()
     - Changed public to external
     - Removed require statements
@@ -39,17 +40,21 @@
     - Changed view to pure
     - Removed balance variable
     - Returns new BALANCE variable
+    - Converted to Assembly
+
 - Revised addToWhiteList()
     - Changed public to external
     - Removed message from require statement
     - Removed if/else logic
     - Removed variable wasLastAddedOdd
+    - Converted to Assembly
 - Revised getPaymentStatus()
     - Removed sender variable argument
     - Changed public to external
     - Added view
     - Revised return statement
         - returns true and _lastamount variable
+    - Converted to Assembly
 - Removed getTradingMode()
 - Removed updatePayment()
 - Removed addHistory()
