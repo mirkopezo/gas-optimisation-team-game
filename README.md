@@ -1,6 +1,8 @@
 Before merging make sure that the deployment cost is lower than the current deployment cost. If that is case, change the deployment cost to the new value.
 
-Current deployment cost: 149080
+Starting Deployment Cost: &nbsp;&nbsp;2,541,445 gas  
+Current Deployment Cost: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;149,080 gas  
+Reduction: 94.1%
 
 ![Gas Report](gas-report.png)
 
