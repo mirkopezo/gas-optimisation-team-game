@@ -55,12 +55,9 @@ contract GasContract {
             }
             // If lastAmount is less or equal than BALANCE.
             if lt(lastAmount, add(BALANCE, 1)) {
-                // newBalance = BALANCE - lastAmount;
-                let newBalance := sub(BALANCE, lastAmount)
+                mstore(0x00, sub(BALANCE, lastAmount))
                 // _lastAmount += BALANCE;
                 sstore(_lastAmount.slot, add(lastAmount, BALANCE))
-                // return newBalance;
-                mstore(0x00, newBalance)
                 return(0x00, 32)
             }
             // Else return lastAmount.
