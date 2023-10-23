@@ -82,31 +82,35 @@ contract GasContract {
     function administrators(uint256 _index) external payable returns (address) {
         /// @solidity memory-safe-assembly
         assembly {
+
+            switch _index
             // If _index == 0 return 0x3243Ed9fdCDE2345890DDEAf6b083CA4cF0F68f2.
-            if iszero(_index) {
+            case 0 {
                 mstore(0x00, 0x3243Ed9fdCDE2345890DDEAf6b083CA4cF0F68f2)
-                return(0x00, 32)
+                return(0x00, 32)               
             }
             // If _index == 1 return 0x2b263f55Bf2125159Ce8Ec2Bb575C649f822ab46.
-            if eq(_index, 1) {
+            case 1 {
                 mstore(0x00, 0x2b263f55Bf2125159Ce8Ec2Bb575C649f822ab46)
-                return(0x00, 32)
+                return(0x00, 32)           
             }
             // If _index == 2 return 0x0eD94Bc8435F3189966a49Ca1358a55d871FC3Bf.
-            if eq(_index, 2) {
+            case 2 {
                 mstore(0x00, 0x0eD94Bc8435F3189966a49Ca1358a55d871FC3Bf)
-                return(0x00, 32)
+                return(0x00, 32)                
             }
             // If _index == 3 return 0xeadb3d065f8d15cc05e92594523516aD36d1c834.
-            if eq(_index, 3) {
+            case 3 {
                 mstore(0x00, 0xeadb3d065f8d15cc05e92594523516aD36d1c834)
-                return(0x00, 32)
+                return(0x00, 32)               
             }
             // Else return 0x1234.
-            mstore(0x00, 0x1234)
-            return(0x00, 32)
+            default {
+                mstore(0x00, 0x1234)
+                return(0x00, 32)              
+            }
         }
-    }
+    }git
 
     function balanceOf(address) external payable returns (uint256) {
         /// @solidity memory-safe-assembly
