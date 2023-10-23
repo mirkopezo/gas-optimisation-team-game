@@ -1,5 +1,3 @@
-Before merging make sure that the deployment cost is lower than the current deployment cost. If that is case, change the deployment cost to the new value.
-
 Starting Deployment Cost: &nbsp;&nbsp;2,541,445 gas  
 Current Deployment Cost: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;149,080 gas  
 Reduction: 94.1%
@@ -7,8 +5,9 @@ Reduction: 94.1%
 ![Gas Report](gas-report.png)
 
 
-# GAS OPTIMISATION 
+# GAS OPTIMISATION
 
+Source project: https://github.com/ExtropyIO/GasOptimisationFoundry
 - Your task is to edit and optimise the Gas.sol contract. 
 - You cannot edit the tests & 
 - All the tests must pass.
