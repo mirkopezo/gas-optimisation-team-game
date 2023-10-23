@@ -3,6 +3,7 @@ src = 'src'
 out = 'out'
 libs = ['lib']
 solc = "0.8.21"
+optimizer = true
 # https://docs.soliditylang.org/en/v0.8.21/ir-breaking-changes.html#solidity-ir-based-codegen-changes
 via_ir = true
 # https://docs.soliditylang.org/en/v0.8.21/internals/optimizer.html#optimizer-parameter-runs
