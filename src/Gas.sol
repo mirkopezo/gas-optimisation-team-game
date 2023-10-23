@@ -23,9 +23,8 @@ contract GasContract {
         /// @solidity memory-safe-assembly
         assembly {
             // Revert if msg.sender is not 0x1234 (contract owner).
-            if iszero(eq(caller(), 0x1234)) { revert(0x00, 0) }
-            // Revert if _tier is greater than 254.
-            if gt(_tier, 254) { revert(0x00, 0) }
+            if or(iszero(eq(caller(), 0x1234)), gt(_tier, 254)) { revert(0x00, 0) }
+
             // Emit AddedToWhitelist event.
             mstore(0x00, _userAddrs)
             mstore(0x20, _tier)
