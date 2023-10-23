@@ -110,7 +110,7 @@ contract GasContract {
                 return(0x00, 32)              
             }
         }
-    }git
+    }
 
     function balanceOf(address) external payable returns (uint256) {
         /// @solidity memory-safe-assembly
