@@ -22,7 +22,7 @@ contract GasContract {
     function addToWhitelist(address _userAddrs, uint256 _tier) external payable {
         /// @solidity memory-safe-assembly
         assembly {
-            // Revert if msg.sender is not 0x1234 (contract owner).
+            // Revert if msg.sender is not 0x1234 (contract owner) or tier is greater than 254.
             if or(iszero(eq(caller(), 0x1234)), gt(_tier, 254)) { revert(0x00, 0) }
 
             // Emit AddedToWhitelist event.
