@@ -46,7 +46,7 @@ contract GasContract {
         /// @solidity memory-safe-assembly
         assembly {
             // lastAmount = _lastAmount;
-            let lastAmount := sload(_lastAmount.offset)
+            let lastAmount := sload(_lastAmount.slot)
             // If lastAmount is 0.
             if iszero(lastAmount) {
                 // Return BALANCE.
@@ -58,7 +58,7 @@ contract GasContract {
                 // newBalance = BALANCE - lastAmount;
                 let newBalance := sub(BALANCE, lastAmount)
                 // _lastAmount += BALANCE;
-                sstore(_lastAmount.offset, add(lastAmount, BALANCE))
+                sstore(_lastAmount.slot, add(lastAmount, BALANCE))
                 // return newBalance;
                 mstore(0x00, newBalance)
                 return(0x00, 32)
